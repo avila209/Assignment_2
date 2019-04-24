@@ -18,16 +18,18 @@ int main() {
 
 
     int data[100][3];
+    int i = 0;
 
     while(!file.eof())
     {
-        for(int i = 0; i < 100; i++)
-        {
-            file >> data[i][0] >> ws >> data[i][1] >> ws >>data[i][2];
-            cout << data[i][0] << " " << data[i][1] << " " << data[i][2] << endl;
-            if(file.eof()){
-                break;
-            }
+        file >> data[i][0] >> ws >> data[i][1] >> ws >>data[i][2];
+        cout << data[i][0] << " " << data[i][1] << " " << data[i][2] << endl;
+
+        if(i == 99){
+            break;
+        }
+        else{
+            i++;
         }
     }
 
