@@ -1,7 +1,9 @@
 #include <iostream>
 #include <fstream>
-#include <sstream>
+
 using namespace std;
+
+void FIFO(int data[100][3], int a);
 
 int main() {
 
@@ -14,7 +16,6 @@ int main() {
     else{
         cout << "Failed" << endl;
     }
-    string ss;
 
 
     int data[100][3];
@@ -33,6 +34,24 @@ int main() {
         }
     }
 
+    FIFO(data, i);
+
     file.close();
     return 0;
+}
+
+void FIFO(int data[100][3], int a){
+    cout << "\n" << "FIFO:" << endl;
+    for(int j = 0; j < a; j++){
+        for(int i = 0; i < a-1; i++) {
+            if (data[i][1] > data[i + 1][1]) {
+                swap(data[i], data[i + 1]);
+            }
+        }
+    }
+    for(int i = 0; i < a; i++){
+        cout << data[i][0] << " " << data[i][1] << " " << data[i][2] << endl;
+    }
+
+
 }
