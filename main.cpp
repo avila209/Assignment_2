@@ -55,13 +55,13 @@ void FIFO(int data[100][3], int a){
         cout << data[i][0] << "\t" << data[i][1] << "\t" << data[i][2] << endl;
     }
 
-    int CompletionTime = 0;
+    int CompletionTime = data[0][1];
     int TurnAroundTime = 0;
     int StartTime = 0;
 
     for(int k = 0; k < a; k++){
         if(data[k][1] < CompletionTime){
-            StartTime = CompletionTime; // Need to add if statement for first token.
+            StartTime = CompletionTime;
             CompletionTime += data[k][2];
         }
         else{
