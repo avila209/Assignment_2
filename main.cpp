@@ -6,6 +6,7 @@ using namespace std;
 void FIFO(int data[100][3], int a);
 void SJF(int data[100][3], int a);
 void BJF(int data[100][3], int a);
+void STCF(int data[100][3], int a);
 
 int main() {
 
@@ -13,7 +14,7 @@ int main() {
 
     if(file.is_open())
     {
-        cout << "file opened correctly" << endl;
+        cout << "File opened correctly" << endl;
     }
     else{
         cout << "Failed" << endl;
@@ -40,6 +41,7 @@ int main() {
     FIFO(data, i);
     SJF(data, i);
     BJF(data, i);
+    STCF(data, i);
 
     file.close();
     return 0;
@@ -77,7 +79,7 @@ void FIFO(int data[100][3], int a){
         ResponseTime = StartTime - data[k][1];
 
         cout << "Job ID: " << data[k][0] << "\t Start Time = " << StartTime
-             << ",\t Finish Time = " << TurnAroundTime << " \t Total Time = "
+             << ",\t Finish Time = " << TurnAroundTime << ", \t Total Time = "
              << CompletionTime << ", \t Response Time = "<< ResponseTime << endl;
     }
 }
@@ -117,7 +119,7 @@ void SJF(int data[100][3], int a){
         ResponseTime = StartTime - data[k][1];
 
         cout << "Job ID: " << data[k][0] << "\t Start Time = " << StartTime
-             << ",\t Finish Time = " << TurnAroundTime << " \t Total Time = "
+             << ",\t Finish Time = " << TurnAroundTime << ", \t Total Time = "
              << CompletionTime << ", \t Response Time = "<< ResponseTime << endl;
     }
 }
@@ -158,7 +160,58 @@ void BJF(int data[100][3], int a){
         ResponseTime = StartTime - data[k][1];
 
         cout << "Job ID: " << data[k][0] << "\t Start Time = " << StartTime
-             << ",\t Finish Time = " << TurnAroundTime << " \t Total Time = "
+             << ",\t Finish Time = " << TurnAroundTime << ", \t Total Time = "
              << CompletionTime << ", \t Response Time = "<< ResponseTime << endl;
     }
+}
+
+void STCF(int data[100][3], int a){
+    cout << "\n" << "STCF:" << endl;
+    cout << "JID" << "\t" << "AT" << "\t" << "DT" << endl;
+    for(int j = 0; j < a; j++){
+        for(int i = 0; i < a-1; i++) {
+            if (data[i][1] > data[i + 1][1]) {
+                swap(data[i], data[i + 1]);
+            }
+            else if(data[i][1] == data[i + 1][1] && data[i][2] > data[i + 1][2]){
+                swap(data[i], data[i + 1]);
+            }
+        }
+    }
+    for(int i = 0; i < a; i++){
+        cout << data[i][0] << "\t" << data[i][1] << "\t" << data[i][2] << endl;
+    }
+
+    int CompletionTime = data[0][1];
+    int TurnAroundTime = 0;
+    int StartTime = 0;
+    int ResponseTime = 0;
+
+    for(int k = 0; k < a; k++){
+        if(data[k][1] < CompletionTime){ //Arrival time  < Completion Time
+            StartTime = CompletionTime;
+            CompletionTime += data[k][2];
+        }
+        else{
+            CompletionTime = (data[k][1] + data[k][2]);
+            StartTime = data[k][1];
+        }
+        TurnAroundTime = CompletionTime - data[k][1];
+        ResponseTime = StartTime - data[k][1];
+
+        cout << "Job ID: " << data[k][0] << "\t Start Time = " << StartTime
+             << ",\t Finish Time = " << TurnAroundTime << ", \t Total Time = "
+             << CompletionTime << ", \t Response Time = "<< ResponseTime << endl;
+    }
+
+    /*
+    Preemptive:
+        If AT.P2 < BT.P1, check if BT.P2 < BT.P1, execute P2
+	        remaining = CT.P2-AT.P2+BT.P1
+
+        Else remaining = 0.
+
+        int remaining[100].
+    */
+
 }
