@@ -20,11 +20,12 @@ int main() {
 
     int data[100][3];
     int i = 0;
+    cout << "JID" << "\t" << "AT" << "\t" << "DT" << endl;
 
     while(!file.eof())
     {
         file >> data[i][0] >> ws >> data[i][1] >> ws >>data[i][2];
-        cout << data[i][0] << " " << data[i][1] << " " << data[i][2] << endl;
+        cout << data[i][0] << "\t" << data[i][1] << "\t" << data[i][2] << endl;
 
         if(i == 99){
             break;
@@ -42,6 +43,7 @@ int main() {
 
 void FIFO(int data[100][3], int a){
     cout << "\n" << "FIFO:" << endl;
+    cout << "JID" << "\t" << "AT" << "\t" << "DT" << endl;
     for(int j = 0; j < a; j++){
         for(int i = 0; i < a-1; i++) {
             if (data[i][1] > data[i + 1][1]) {
@@ -50,7 +52,7 @@ void FIFO(int data[100][3], int a){
         }
     }
     for(int i = 0; i < a; i++){
-        cout << data[i][0] << " " << data[i][1] << " " << data[i][2] << endl;
+        cout << data[i][0] << "\t" << data[i][1] << "\t" << data[i][2] << endl;
     }
 
 
