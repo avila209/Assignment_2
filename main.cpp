@@ -39,6 +39,7 @@ int main() {
 
     FIFO(data, i);
     SJF(data, i);
+    BJF(data, i);
 
     file.close();
     return 0;
