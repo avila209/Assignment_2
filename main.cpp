@@ -55,12 +55,17 @@ void FIFO(int data[100][3], int a){
         cout << data[i][0] << "\t" << data[i][1] << "\t" << data[i][2] << endl;
     }
 
-    int CompletionTime;
-    int TurnAroundTime;
+    int CompletionTime = 0;
+    int TurnAroundTime = 0;
 
     for(int k = 0; k < a; k++){
         //Need to add if conditions to check if arrival time is before etc...
-        CompletionTime += (data[k][1] + data[k][2]);
+        if(data[k][1] < CompletionTime){
+            CompletionTime += data[k][2];
+        }
+        else{
+            CompletionTime += (data[k][1] + data[k][2]);
+        }
         TurnAroundTime = CompletionTime - data[k][1];
         cout << "Job ID: " << data[k][0] << " Completion time = " << CompletionTime << ", Turn Around Time = " << TurnAroundTime << endl;
     }
