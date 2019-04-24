@@ -25,6 +25,9 @@ int main() {
         {
             file >> data[i][0] >> ws >> data[i][1] >> ws >>data[i][2];
             cout << data[i][0] << " " << data[i][1] << " " << data[i][2] << endl;
+            if(file.eof()){
+                break;
+            }
         }
     }
 
