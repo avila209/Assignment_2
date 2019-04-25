@@ -186,8 +186,14 @@ void STCF(int data[100][3], int a){
     int TurnAroundTime = 0;
     int StartTime = 0;
     int ResponseTime = 0;
+    int remaining[100];
 
     for(int k = 0; k < a; k++){
+        if((data[k+1][1] < data[k][2]) && (data[k+1][2] < (data[k][2] - data[k+1][1]))) { // 2nd Arrival time < 1st Run Time && 2nd Run time < 1st Run Time - 2nd Arrival Time
+            remaining[k] = data[k][2] - data[k+1][1]; // 1st Remaining = 1st Run Time - 2nd Arrival Time
+        }
+
+        /*
         if(data[k][1] < CompletionTime){ //Arrival time  < Completion Time
             StartTime = CompletionTime;
             CompletionTime += data[k][2];
@@ -198,6 +204,7 @@ void STCF(int data[100][3], int a){
         }
         TurnAroundTime = CompletionTime - data[k][1];
         ResponseTime = StartTime - data[k][1];
+        */
 
         cout << "Job ID: " << data[k][0] << "\t Start Time = " << StartTime
              << ",\t Finish Time = " << TurnAroundTime << ", \t Total Time = "
