@@ -39,8 +39,8 @@ int main() {
     }
 
     //FIFO(data, i);
-    SJF(data, i);
-    //BJF(data, i);
+    //SJF(data, i);
+    BJF(data, i);
     //STCF(data, i);
 
     file.close();
@@ -83,7 +83,6 @@ void FIFO(int data[100][3], int n){
 
 void SJF(int data[100][3], int n){
     cout << "\n" << "SJF:" << endl;
-    cout << "JID" << "\t" << "AT" << "\t" << "DT" << endl;
     //Sorts by arrival time and burst time
     for(int j = 0; j < n; j++){
         for(int i = 0; i < n-1; i++) {
@@ -135,56 +134,63 @@ void SJF(int data[100][3], int n){
             }
         }
     }
-    /*
-    //Checks if any new processes arrives during during process time
-    for(int k = 0; k < n; k++){
-        if(data[k][1] < CompletionTime){ // new process starts before completion time
-            data[k][1] = CompletionTime; //Inside box
-        }
-        else{
-            CompletionTime = (data[k][1] + data[k][2]);
-        }
-    }
+}
 
+void BJF(int data[100][3], int n){
+    cout << "\n" << "BJF:" << endl;
+    //Sorts by arrival time and burst time
     for(int j = 0; j < n; j++){
         for(int i = 0; i < n-1; i++) {
             if (data[i][1] > data[i + 1][1]) {
                 swap(data[i], data[i + 1]);
-                swap(OriginalArrival[1], OriginalArrival[i+1]);
             }
-            else if(data[i][1] == data[i + 1][1] && data[i][2] > data[i + 1][2]){
+            else if(data[i][1] == data[i + 1][1] && data[i][2] < data[i + 1][2]){
                 swap(data[i], data[i + 1]);
-                swap(OriginalArrival[1], OriginalArrival[i+1]);
             }
         }
     }
 
-    CompletionTime = data[0][1];
-    for(int j = 0; j < n; j++){
-        if(data[j][1] < CompletionTime){
-            StartTime = CompletionTime;
-            CompletionTime += data[j][2];
-        }
-        else{
-            CompletionTime = (data[j][1] + data[j][2]);
-            StartTime = data[j][1];
-        }
-        TurnAroundTime = CompletionTime - OriginalArrival[j];
-        ResponseTime = StartTime - OriginalArrival[j];
+    int Total = 0;
+    int Current  = 0;
 
-        cout << "Job ID: " << data[j][0] << "\t Start Time = " << StartTime
-             << ",\t Finish Time = " << TurnAroundTime << ", \t Total Time = "
-             << CompletionTime << ", \t Response Time = "<< ResponseTime << endl;
-    }
+    int FinishTime = 0, StartTime = 0, ResponseTime = 0;
 
     for(int k = 0; k < n; k++){
-        data[k][1] = OriginalArrival[k];
+        Total += data[k][2];
     }
-     */
-}
 
+    //Need to add sort by completion time if arrival is less than Current
+    int Complete = 0;
+    while(Current < Total){
+        for(int k = Complete; k < n; k++) { //Remaining processes
+            //Swap remaining based on burst time alone
+            for(int i = Complete; i < n; i++){
+                for(int j = Complete; j < n-1; j++){
+                    if(data[j][2] < data[j+1][2] && data[j+1][1] <= Current){
+                        swap(data[j], data[j+1]);
+                    }
+                }
+            }
 
-void BJF(int data[100][3], int n){
+            if (data[k][1] <= Current) {
+                StartTime = Current;
+
+                Current = data[k][2] + Current; //Actual Code
+                Complete++;                     //Rest is just Calculations within the for loop
+
+                FinishTime = Current - StartTime;
+                ResponseTime = StartTime - data[k][1];
+                cout << "Job ID: " << data[k][0] << "\t Start Time = " << StartTime
+                     << ",\t Finish Time = " << FinishTime << ", \t Total Time = "
+                     << Current << ", \t Response Time = "<< ResponseTime << endl;
+                continue;
+            } else {
+                Current++;
+            }
+        }
+    }
+
+    /*
     cout << "\n" << "BJF:" << endl;
     cout << "JID" << "\t" << "AT" << "\t" << "DT" << endl;
     for(int j = 0; j < n; j++){
@@ -257,6 +263,7 @@ void BJF(int data[100][3], int n){
     for(int k = 0; k < n; k++){
         data[k][1] = OriginalArrival[k];
     }
+    */
 }
 
 
