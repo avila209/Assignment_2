@@ -43,6 +43,8 @@ int main() {
     BJF(data, i);
     //STCF(data, i);
 
+    // ********  Code gods, I believe that SJF and BJF alter the data so I commented the functions out for testing purposes  ********
+
     file.close();
     return 0;
 }
@@ -189,81 +191,6 @@ void BJF(int data[100][3], int n){
             }
         }
     }
-
-    /*
-    cout << "\n" << "BJF:" << endl;
-    cout << "JID" << "\t" << "AT" << "\t" << "DT" << endl;
-    for(int j = 0; j < n; j++){
-        for(int i = 0; i < n-1; i++) {
-            if (data[i][1] > data[i + 1][1]) {
-                swap(data[i], data[i + 1]);
-            }
-            else if(data[i][1] == data[i + 1][1] && data[i][2] < data[i + 1][2]){
-                swap(data[i], data[i + 1]);
-            }
-        }
-    }
-    int CompletionTime = data[0][1];
-    int TurnAroundTime = 0;
-    int StartTime = 0;
-    int ResponseTime = 0;
-
-
-    int OriginalArrival[n];
-
-    for(int k = 0; k < n; k++){
-        OriginalArrival[k] = data[k][1];
-    }
-
-    for(int k = 0; k < n; k++){
-        if(data[k][1] < CompletionTime){
-            StartTime = CompletionTime;
-            data[k][1] = CompletionTime; //Inside box
-            //CompletionTime += data[k][2];
-        }
-        else{
-            CompletionTime = (data[k][1] + data[k][2]);
-            StartTime = data[k][1];
-        }
-        TurnAroundTime = CompletionTime - data[k][1];
-        ResponseTime = StartTime - data[k][1];
-    }
-
-    for(int j = 0; j < n; j++){
-        for(int i = 0; i < n-1; i++) {
-            if (data[i][1] > data[i + 1][1]) {
-                swap(data[i], data[i + 1]);
-                swap(OriginalArrival[1], OriginalArrival[i+1]);
-            }
-            else if(data[i][1] == data[i + 1][1] && data[i][2] < data[i + 1][2]){
-                swap(data[i], data[i + 1]);
-                swap(OriginalArrival[1], OriginalArrival[i+1]);
-            }
-        }
-    }
-
-    CompletionTime = data[0][1];
-    for(int j = 0; j < n; j++){
-        if(data[j][1] < CompletionTime){
-            StartTime = CompletionTime;
-            CompletionTime += data[j][2];
-        }
-        else{
-            CompletionTime = (data[j][1] + data[j][2]);
-            StartTime = data[j][1];
-        }
-        TurnAroundTime = CompletionTime - OriginalArrival[j];
-        ResponseTime = StartTime - OriginalArrival[j];
-
-        cout << "Job ID: " << data[j][0] << "\t Start Time = " << StartTime
-             << ",\t Finish Time = " << TurnAroundTime << ", \t Total Time = "
-             << CompletionTime << ", \t Response Time = "<< ResponseTime << endl;
-    }
-
-    for(int k = 0; k < n; k++){
-        data[k][1] = OriginalArrival[k];
-    }
-    */
 }
 
 
