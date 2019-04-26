@@ -99,6 +99,8 @@ void SJF(int data[100][3], int n){
     int Total = 0;
     int Current  = 0;
 
+    int FinishTime = 0, StartTime = 0, ResponseTime = 0;
+
     for(int k = 0; k < n; k++){
         Total += data[k][2];
     }
@@ -117,20 +119,21 @@ void SJF(int data[100][3], int n){
             }
 
             if (data[k][1] <= Current) {
-                Current = data[k][2] + Current;
-                Complete++;
+                StartTime = Current;
 
+                Current = data[k][2] + Current; //Actual Code
+                Complete++;                     //Rest is just Calculations within the for loop
 
-                cout << "Job ID: " << data[k][0] << "Total Time: " << Current << endl;
+                FinishTime = Current - StartTime;
+                ResponseTime = StartTime - data[k][1];
+                cout << "Job ID: " << data[k][0] << "\t Start Time = " << StartTime
+                     << ",\t Finish Time = " << FinishTime << ", \t Total Time = "
+                     << Current << ", \t Response Time = "<< ResponseTime << endl;
                 continue;
             } else {
                 Current++;
             }
         }
-    }
-
-    for(int k = 0; k < n; k++){
-        cout << data[k][0] << " "<<  data[k][1] << " " <<  data[k][2] << endl;
     }
     /*
     //Checks if any new processes arrives during during process time
