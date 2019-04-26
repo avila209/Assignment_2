@@ -166,8 +166,7 @@ void BJF(int data[100][3], int a){
 }
 
 
-void STCF(int data[100][3], int n)
-{
+void STCF(int data[100][3], int n){
     int StartTime[n];
     int FinishTime[n];
     int ResponseTime[n];
@@ -204,7 +203,7 @@ void STCF(int data[100][3], int n)
             }
         }
 
-        if (pdone == false) { //Job is completed, no new jobs during this time period. Increment time.
+        if (!pdone) { //Job is completed, no new jobs during this time period. Increment time.
             time++;
             continue;
         }
