@@ -1,13 +1,14 @@
 #include <iostream>
 #include <fstream>
 #include <stdio.h>
+#include <algorithm>
 
 using namespace std;
 
 void FIFO(int data[100][3], int a);
 void SJF(int data[100][3], int a);
 void BJF(int data[100][3], int a);
-void STCF(int data[100][3], int n);
+void STCF(int data[100][3], int a);
 
 int main() {
     ifstream file ("sample-jobs.dat");
@@ -37,13 +38,10 @@ int main() {
         }
     }
 
-    FIFO(data, i);
+    //FIFO(data, i);
     SJF(data, i);
-    BJF(data, i);
-    STCF(data, i);
-
-    cout << i << endl;
-
+    //BJF(data, i);
+    //STCF(data, i);
 
     file.close();
     return 0;
@@ -58,10 +56,6 @@ void FIFO(int data[100][3], int n){
                 swap(data[i], data[i + 1]);
             }
         }
-    }
-
-    for(int i = 0; i < n; i++){
-        cout << data[i][0] << "\t" << data[i][1] << "\t" << data[i][2] << endl;
     }
 
     int CompletionTime = data[0][1];
@@ -90,6 +84,7 @@ void FIFO(int data[100][3], int n){
 void SJF(int data[100][3], int n){
     cout << "\n" << "SJF:" << endl;
     cout << "JID" << "\t" << "AT" << "\t" << "DT" << endl;
+    //Sorts by arrival time and burst time
     for(int j = 0; j < n; j++){
         for(int i = 0; i < n-1; i++) {
             if (data[i][1] > data[i + 1][1]) {
@@ -100,30 +95,52 @@ void SJF(int data[100][3], int n){
             }
         }
     }
-    int CompletionTime = data[0][1];
-    int TurnAroundTime = 0;
-    int StartTime = 0;
-    int ResponseTime = 0;
 
-
-    int OriginalArrival[n];
+    int Total = 0;
+    int Current  = 0;
 
     for(int k = 0; k < n; k++){
-        OriginalArrival[k] = data[k][1];
+        Total += data[k][2];
+    }
+
+    //Need to add sort by completion time if arrival is less than Current
+    int Complete = 0;
+    while(Current < Total){
+        for(int k = Complete; k < n; k++) { //Remaining processes
+            //Swap remaining based on burst time alone
+            for(int i = Complete; i < n; i++){
+                for(int j = Complete; j < n-1; j++){
+                    if(data[j][2] > data[j+1][2] && data[j+1][1] <= Current){
+                        swap(data[j], data[j+1]);
+                    }
+                }
+            }
+
+            if (data[k][1] <= Current) {
+                Current = data[k][2] + Current;
+                Complete++;
+
+
+                cout << "Job ID: " << data[k][0] << "Total Time: " << Current << endl;
+                continue;
+            } else {
+                Current++;
+            }
+        }
     }
 
     for(int k = 0; k < n; k++){
-        if(data[k][1] < CompletionTime){
-            StartTime = CompletionTime;
+        cout << data[k][0] << " "<<  data[k][1] << " " <<  data[k][2] << endl;
+    }
+    /*
+    //Checks if any new processes arrives during during process time
+    for(int k = 0; k < n; k++){
+        if(data[k][1] < CompletionTime){ // new process starts before completion time
             data[k][1] = CompletionTime; //Inside box
-            //CompletionTime += data[k][2];
         }
         else{
             CompletionTime = (data[k][1] + data[k][2]);
-            StartTime = data[k][1];
         }
-        TurnAroundTime = CompletionTime - data[k][1];
-        ResponseTime = StartTime - data[k][1];
     }
 
     for(int j = 0; j < n; j++){
@@ -137,10 +154,6 @@ void SJF(int data[100][3], int n){
                 swap(OriginalArrival[1], OriginalArrival[i+1]);
             }
         }
-    }
-
-    for(int i = 0; i < n; i++){
-        cout << data[i][0] << "\t" << OriginalArrival[i] << "\t" << data[i][2] << endl;
     }
 
     CompletionTime = data[0][1];
@@ -164,6 +177,7 @@ void SJF(int data[100][3], int n){
     for(int k = 0; k < n; k++){
         data[k][1] = OriginalArrival[k];
     }
+     */
 }
 
 
@@ -217,10 +231,6 @@ void BJF(int data[100][3], int n){
                 swap(OriginalArrival[1], OriginalArrival[i+1]);
             }
         }
-    }
-
-    for(int i = 0; i < n; i++){
-        cout << data[i][0] << "\t" << OriginalArrival[i] << "\t" << data[i][2] << endl;
     }
 
     CompletionTime = data[0][1];
