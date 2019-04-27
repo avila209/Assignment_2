@@ -9,13 +9,13 @@ void FIFO(int data[100][3], int a);
 void SJF(int data[100][3], int a);
 void BJF(int data[100][3], int a);
 void STCF(int data[100][3], int a);
-void RR(int data[100][3], int a);
+void RR(int data[100][3], int a, int QT);
 
 int main() {
     ifstream file ("sample-jobs.dat");
 
     if(file.is_open()){
-        cout << "File opened correctly" << endl;
+        cout << "File opened correctly." << endl;
     }
     else{
         cout << "Failed" << endl;
@@ -32,18 +32,31 @@ int main() {
         if(i == 99){
             break;
         }
-        else{
-            i++;
-        }
+        i++;
     }
 
-    //FIFO(data, i);
-    //SJF(data, i);
-    //BJF(data, i);
-    //STCF(data, i);
-    RR(data, i);
+    int QT;
+    cout << endl << "Please enter the Quantum time for Round Robin Scheduling: ";
+    cin >> QT;
 
-    // ********  Code gods, I believe that SJF and BJF alter the data so I commented the functions out for testing purposes  ********
+    int data1[i][3];
+    int data2[i][3];
+    int data3[i][3];
+    int data4[i][3];
+
+    //Clone data so functions don't interfere with original data.
+    for(int j=0; j < i; j++){
+        data1[j][0] = data[j][0]; data1[j][1] = data[j][1]; data1[j][2] = data[j][2];
+        data2[j][0] = data[j][0]; data2[j][1] = data[j][1]; data2[j][2] = data[j][2];
+        data3[j][0] = data[j][0]; data3[j][1] = data[j][1]; data3[j][2] = data[j][2];
+        data4[j][0] = data[j][0]; data4[j][1] = data[j][1]; data4[j][2] = data[j][2];
+    }
+
+    FIFO(data, i);
+    SJF(data1, i);
+    BJF(data2, i);
+    STCF(data3, i);
+    RR(data4, i, QT);
 
     file.close();
     return 0;
@@ -197,7 +210,7 @@ void STCF(int data[100][3], int n){
     int ResponseTime[n];
     int TotalTime[n];
 
-    int big = 999;
+    int big = 999999;
     int RemainingTime[n]; //Remaining time for each process starting with the burst times.
 
     for (int i = 0; i < n; i++){
@@ -264,7 +277,7 @@ void STCF(int data[100][3], int n){
     }
 }
 
-void RR(int data[100][3], int n){
+void RR(int data[100][3], int n, int QT){
     cout << "\n" << "RR:" << endl;
     //Sorts by arrival time
     for(int j = 0; j < n; j++){
@@ -291,8 +304,6 @@ void RR(int data[100][3], int n){
         StartTime[k] = -1;
         ResponseTime[k] = -1;
     }
-
-    int QT = 3; //Quantum Time
 
     int Complete = 0;
     while(Current < Total){
