@@ -9,12 +9,12 @@ void FIFO(int data[100][3], int a);
 void SJF(int data[100][3], int a);
 void BJF(int data[100][3], int a);
 void STCF(int data[100][3], int a);
+void RR(int data[100][3], int a);
 
 int main() {
     ifstream file ("sample-jobs.dat");
 
-    if(file.is_open())
-    {
+    if(file.is_open()){
         cout << "File opened correctly" << endl;
     }
     else{
@@ -25,8 +25,7 @@ int main() {
     int i = 0;
     cout << "JID" << "\t" << "AT" << "\t" << "DT" << endl;
 
-    while(!file.eof())
-    {
+    while(!file.eof()){
         file >> data[i][0] >> ws >> data[i][1] >> ws >>data[i][2];
         cout << data[i][0] << "\t" << data[i][1] << "\t" << data[i][2] << endl;
 
@@ -40,8 +39,9 @@ int main() {
 
     //FIFO(data, i);
     //SJF(data, i);
-    BJF(data, i);
+    //BJF(data, i);
     //STCF(data, i);
+    RR(data, i);
 
     // ********  Code gods, I believe that SJF and BJF alter the data so I commented the functions out for testing purposes  ********
 
@@ -51,7 +51,6 @@ int main() {
 
 void FIFO(int data[100][3], int n){
     cout << "\n" << "FIFO:" << endl;
-    cout << "JID" << "\t" << "AT" << "\t" << "DT" << endl;
     for(int j = 0; j < n; j++){
         for(int i = 0; i < n-1; i++) {
             if (data[i][1] > data[i + 1][1]) {
@@ -106,7 +105,6 @@ void SJF(int data[100][3], int n){
         Total += data[k][2];
     }
 
-    //Need to add sort by completion time if arrival is less than Current
     int Complete = 0;
     while(Current < Total){
         for(int k = Complete; k < n; k++) { //Remaining processes
@@ -193,7 +191,6 @@ void BJF(int data[100][3], int n){
     }
 }
 
-
 void STCF(int data[100][3], int n){
     int StartTime[n];
     int FinishTime[n];
@@ -264,5 +261,50 @@ void STCF(int data[100][3], int n){
         cout << "Job ID: " << data[k][0] << "\t Start Time = " << StartTime[k]
              << ",\t Finish Time = " << FinishTime[k] << ", \t Total Time = "
              << TotalTime[k] << ", \t Response Time = "<< ResponseTime[k] << endl;
+    }
+}
+
+void RR(int data[100][3], int n){
+    cout << "\n" << "RR:" << endl;
+    //Sorts by arrival time
+    for(int j = 0; j < n; j++){
+        for(int i = 0; i < n-1; i++) {
+            if (data[i][1] > data[i + 1][1]) {
+                swap(data[i], data[i + 1]);
+            }
+        }
+    }
+
+    int Total = 0;
+    int Current  = 0;
+
+    int FinishTime = 0, StartTime = 0, ResponseTime = 0;
+    int Remaining[n];
+
+    for(int k = 0; k < n; k++){
+        Total += data[k][2];
+        Remaining[k] = data[k][2];
+    }
+
+    int QT = 3; //Quantum Time
+
+    int Complete = 0;
+    while(Current < Total){
+        for(int k = 0; k < n; k++){ //Cycle through all processes
+            if(Remaining[k] <= QT && Remaining[k] > 0){ //If can be done within QT and not already complete
+                Current = Remaining[k] + Current; //Current = Current time + burst time of process
+                Remaining[k] = 0;
+
+                cout << "Process " << data[k][0] << " is complete at " << Current << endl;
+                Complete++; //Process complete
+            }
+            else if(Remaining[k] > QT){
+                Remaining[k] = Remaining[k] - QT;
+                Current += QT;
+                cout << "Process " << data[k][0] << " is slower than QT, Remaining = " << Remaining[k] << endl;
+            }
+        }
+
+        //Finish remaining here.
     }
 }
