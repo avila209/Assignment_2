@@ -278,12 +278,18 @@ void RR(int data[100][3], int n){
     int Total = 0;
     int Current  = 0;
 
-    int FinishTime = 0, StartTime = 0, ResponseTime = 0;
+    int FinishTime[n];
+    int StartTime[n];
+    int TotalTime[n];
+    int ResponseTime[n];
+
     int Remaining[n];
 
     for(int k = 0; k < n; k++){
         Total += data[k][2];
         Remaining[k] = data[k][2];
+        StartTime[k] = -1;
+        ResponseTime[k] = -1;
     }
 
     int QT = 3; //Quantum Time
@@ -291,20 +297,31 @@ void RR(int data[100][3], int n){
     int Complete = 0;
     while(Current < Total){
         for(int k = 0; k < n; k++){ //Cycle through all processes
+            if(StartTime[k] == -1){
+                StartTime[k] = Current;
+                ResponseTime[k] = Current - data[k][1]; //Start time - Arrival time
+            }
+
             if(Remaining[k] <= QT && Remaining[k] > 0){ //If can be done within QT and not already complete
                 Current = Remaining[k] + Current; //Current = Current time + burst time of process
                 Remaining[k] = 0;
 
-                cout << "Process " << data[k][0] << " is complete at " << Current << endl;
+                TotalTime[k] = Current; //Completion time
+                FinishTime[k] = Current - data[k][1]; //Completion time - Arrival time
+
                 Complete++; //Process complete
             }
             else if(Remaining[k] > QT){
                 Remaining[k] = Remaining[k] - QT;
                 Current += QT;
-                cout << "Process " << data[k][0] << " is slower than QT, Remaining = " << Remaining[k] << endl;
             }
         }
+    }
 
-        //Finish remaining here.
+    //Print
+    for(int k = 0; k < n; k++){
+        cout << "Job ID: " << data[k][0] << "\t Start Time = " << StartTime[k]
+             << ",\t Finish Time = " << FinishTime[k] << ", \t Total Time = "
+             << TotalTime[k] << ", \t Response Time = "<< ResponseTime[k] << endl;
     }
 }
