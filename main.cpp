@@ -86,7 +86,7 @@ void FIFO(int data[100][3], int n){
             CompletionTime = (data[k][1] + data[k][2]);
             StartTime = data[k][1];
         }
-        TurnAroundTime = CompletionTime - StartTime;
+        TurnAroundTime = CompletionTime - data[k][1];
         ResponseTime = StartTime - data[k][1];
 
         cout << "Job ID: " << data[k][0] << "\t Start Time = " << StartTime
