@@ -308,12 +308,12 @@ void RR(int data[100][3], int n, int QT){
     int Complete = 0;
     while(Current < Total){
         for(int k = 0; k < n; k++){ //Cycle through all processes
-            if(StartTime[k] == -1){
+            if(StartTime[k] == -1 && data[k][1] <= Current){
                 StartTime[k] = Current;
                 ResponseTime[k] = Current - data[k][1]; //Start time - Arrival time
             }
 
-            if(Remaining[k] <= QT && Remaining[k] > 0){ //If can be done within QT and not already complete
+            if(Remaining[k] <= QT && Remaining[k] > 0 && data[k][1] <= Current){ //If can be done within QT and not already complete
                 Current = Remaining[k] + Current; //Current = Current time + burst time of process
                 Remaining[k] = 0;
 
@@ -322,7 +322,7 @@ void RR(int data[100][3], int n, int QT){
 
                 Complete++; //Process complete
             }
-            else if(Remaining[k] > QT){
+            else if(Remaining[k] > QT && data[k][1] <= Current){
                 Remaining[k] = Remaining[k] - QT;
                 Current += QT;
             }
