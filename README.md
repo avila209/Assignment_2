@@ -5,7 +5,8 @@
 	Finish Time: Time the process finished - Time the process arrived.
 	Total Time: Current time of program when the process fully completed.
 	Response Time: Time the process started - Time the process arrived.
-
+	
+# Instructions
 	Step 1: Open terminal in linux
 	Step 2: Enter “git clone https://github.com/avila209/Assignment_2” into terminal
   	Step 3: Drag and Drop test.dat files into the same folder as cloned repository where main.cpp is found.
