@@ -1,6 +1,6 @@
 # Assignment_2
 
-Equations:
+# Equations:
 	Start Time: Time the process started.
 	Finish Time: Time the process finished - Time the process arrived.
 	Total Time: Current time of program when the process fully completed.
